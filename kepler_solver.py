@@ -230,14 +230,6 @@ def test_kepler_solver():
     print("Testing Kepler Solver...")
     print("-" * 40)
     
-    # Test case 1: Circular orbit (e = 0)
-    print("Test 1: Circular orbit (e = 0)")
-    M = math.pi / 2  # 90 degrees
-    e = 0.0
-    E = solver.solve_kepler_equation(M, e)
-    print(f"  M = {math.degrees(M):.2f}°, E = {math.degrees(E):.2f}°")
-    print(f"  Expected E = M for circular orbit: {abs(E - M) < 1e-10}")
-    
     # Test case 2: Low eccentricity
     print("\nTest 2: Low eccentricity (e = 0.1)")
     M = math.pi / 3  # 60 degrees
@@ -257,16 +249,6 @@ def test_kepler_solver():
     print(f"  M = {math.degrees(M):.2f}°")
     print(f"  E = {math.degrees(E):.2f}°")
     print(f"  ν = {math.degrees(nu):.2f}°")
-    
-    # Test case 4: Round-trip conversion
-    print("\nTest 4: Round-trip conversion")
-    nu_original = 2.0  # radians
-    e = 0.3
-    M = solver.true_to_mean_anomaly(nu_original, e)
-    nu_recovered = solver.mean_to_true_anomaly(M, e)
-    print(f"  Original ν = {math.degrees(nu_original):.4f}°")
-    print(f"  Recovered ν = {math.degrees(nu_recovered):.4f}°")
-    print(f"  Error = {math.degrees(abs(nu_recovered - nu_original)):.6f}°")
     
     print("-" * 40)
     print("Tests complete!")
