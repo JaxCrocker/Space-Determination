@@ -35,7 +35,8 @@ class InputParser:
             lines = f.readlines()
         
         # Clean lines (strip whitespace)
-        lines = [line.strip() for line in lines if line.strip()]
+        lines = list(filter(None, map(str.strip, lines)))
+
         
         # Try to detect format
         if self._is_tle_format(lines):
