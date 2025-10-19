@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "space-determination"
+version = "0.1.0"
+description = "Orbit propagation & prediction tool (two-body baseline; TLE ingest; future perturbations/visualization)."
+authors = [{ name = "APC 524 Team" }]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "mypy>=1.10",
+  "ruff>=0.6.9",
+  "pre-commit>=3.8",
+  "pyupgrade>=3.19",
+  "types-setuptools",
+]
+
+[tool.setuptools]
+packages = ["space_determination"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-select = ["I"]  # isort-like import ordering
+
+[tool.ruff.lint.isort]
+known-first-party = ["space_determination"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_ignores = true
+ignore_missing_imports = true
+strict = false
+
+[project.scripts]
+space-det = "space_determination.cli:main"
