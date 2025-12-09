@@ -1,8 +1,8 @@
 # Space-Determination: Orbit Propagation & Prediction Tool
 
-An advanced orbital mechanics toolkit for satellite trajectory analysis using live TLE data. Built for APC 524.
+An orbital mechanics toolkit for satellite trajectory analysis using live TLE data. Built for APC 524 at Princeton University.
 
-## 🚀 Features
+## Features
 
 - **Live TLE Data**: Fetch real-time satellite orbital data from orbit.ing-now.com and Celestrak
 - **Multiple Satellites**: Support for ISS, Hubble, Tiangong, and many more popular satellites
@@ -13,7 +13,7 @@ An advanced orbital mechanics toolkit for satellite trajectory analysis using li
 - **Ground Track Calculation**: Compute satellite ground tracks and passes
 - **3D Visualization**: Optional matplotlib-based orbit visualization
 
-## 📋 Requirements
+## Requirements
 
 ```bash
 pip install -r requirements.txt
@@ -26,7 +26,7 @@ pip install -r requirements.txt
 - requests
 - beautifulsoup4
 
-## 🎯 Quick Start
+## Quick Start
 
 ### 1. List Available Satellites
 
@@ -60,7 +60,7 @@ python main.py satellite_tle.txt --time 3600
 
 Reads TLE data from a local file and propagates for 1 hour.
 
-## 📖 Detailed Usage
+## Detailed Usage
 
 ### Command-Line Options
 
@@ -94,7 +94,7 @@ Options:
                           Default: auto (tries both sources)
 ```
 
-## 🛰️ Available Satellites
+## Available Satellites
 
 The tool includes built-in support for these satellites:
 
@@ -116,7 +116,7 @@ You can also use any NORAD ID directly:
 python main.py --live 25544 --time 3600
 ```
 
-## 📊 Examples
+## Examples
 
 ### Example 1: Track ISS for 12 Hours
 
@@ -155,7 +155,7 @@ python main.py --live noaa-18 --time 604800 --output noaa_weekly.csv --format cs
 
 Propagates NOAA-18 weather satellite for 1 week (604800 seconds).
 
-## 🔧 TLE File Format
+## TLE File Format
 
 If using local TLE files, they should follow the standard two-line element format:
 
@@ -169,7 +169,7 @@ ISS (ZARYA)
 **Line 1:** Epoch, ballistic coefficient, etc.
 **Line 2:** Orbital elements (inclination, RAAN, eccentricity, etc.)
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Space-Determination/
@@ -190,13 +190,13 @@ Space-Determination/
 └── README.md               # This file
 ```
 
-## 🧪 Running Tests
+## Running Tests
 
 ```bash
 pytest tests/
 ```
 
-## 🎓 Educational Use
+## Educational Use
 
 This tool was developed for APC 524 and demonstrates:
 
@@ -205,7 +205,7 @@ This tool was developed for APC 524 and demonstrates:
 3. **Software Engineering**: Modular design, error handling, CLI interfaces
 4. **Data Integration**: Live API data fetching, web scraping, multiple data sources
 
-## 📚 Technical Details
+## Technical Details
 
 ### Coordinate Systems
 
@@ -236,7 +236,7 @@ For more accurate long-term propagation, consider using SGP4/SDP4 models.
    - Comprehensive satellite catalog
    - Reliable API access
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### "Could not fetch live data"
 
@@ -259,24 +259,13 @@ python main.py --live iss --time 3600
 pip install -r requirements.txt
 ```
 
-## 🤝 Contributing
+## Authors
 
-This is an educational project for APC 524. For questions or issues:
-1. Check the code documentation
-2. Review the examples above
-3. Contact the course staff
-
-## 📝 License
-
-Educational use for APC 524. See course policies for usage restrictions.
-
-## 👥 Authors
-
-APC 524 Project Team
+David Herrera, Jackson Crocker, Ariyan Sajid
 
 ---
 
-## 🚀 Advanced Usage
+## Advanced Usage
 
 ### Custom Time Intervals
 
@@ -311,13 +300,9 @@ done
 - **CSV**: Spreadsheet-compatible, easy to plot
 - **JSON**: Machine-readable, structured data for further processing
 
-## 📖 Learn More
+## Learn More
 
 - [TLE Format Specification](https://celestrak.org/NORAD/documentation/tle-fmt.php)
 - [Orbital Mechanics Fundamentals](https://en.wikipedia.org/wiki/Orbital_elements)
 - [Two-Body Problem](https://en.wikipedia.org/wiki/Two-body_problem)
 - [Kepler's Equation](https://en.wikipedia.org/wiki/Kepler%27s_equation)
-
----
-
-**Happy Orbiting! 🛰️**
