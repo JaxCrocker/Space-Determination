@@ -375,9 +375,6 @@ done
 
 ## Documentation and Resources
 
-### API Reference
-- **[API_REFERENCE.md](API_REFERENCE.md)**: Complete API documentation with usage examples for all modules
-
 ### External Resources
 - [TLE Format Specification](https://celestrak.org/NORAD/documentation/tle-fmt.php)
 - [Orbital Mechanics Fundamentals](https://en.wikipedia.org/wiki/Orbital_elements)
