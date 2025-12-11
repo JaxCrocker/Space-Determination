@@ -197,7 +197,7 @@ Space-Determination/
 │   ├── example_iss_tracking.py
 │   ├── example_propagation.py
 │   └── example_satellite_comparison.py
-├── tests/                      # Comprehensive test suite (42 tests)
+├── tests/                      # Comprehensive test suite
 │   ├── test_kepler_solver.py
 │   ├── test_orbital_elements.py
 │   ├── test_propagator.py
@@ -208,7 +208,6 @@ Space-Determination/
 │   └── ci.yml
 ├── pyproject.toml             # Package configuration
 ├── requirements.txt           # Python dependencies
-├── API_REFERENCE.md           # Complete API documentation
 └── README.md                  # This file
 ```
 
@@ -374,9 +373,6 @@ done
 - **JSON**: Machine-readable, structured data for further processing
 
 ## Documentation and Resources
-
-### API Reference
-- **[API_REFERENCE.md](API_REFERENCE.md)**: Complete API documentation with usage examples for all modules
 
 ### External Resources
 - [TLE Format Specification](https://celestrak.org/NORAD/documentation/tle-fmt.php)
