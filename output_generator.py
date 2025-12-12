@@ -15,10 +15,8 @@ import constants
 
 
 class OutputGenerator:
-    """Generate and format output from orbital propagation."""
-    
     def __init__(self):
-        """Initialize the output generator."""
+        """Initialize output generator."""
         self.supported_formats = ['txt', 'csv', 'json']
     
     def generate_report(self, initial_elements: OrbitalElements,
@@ -51,7 +49,7 @@ class OutputGenerator:
                           propagation_time: float,
                           output_file: str) -> None:
         """
-        Write human-readable text report.
+        Write human-readable text report
         
         Args:
             initial_elements: Initial orbital elements
