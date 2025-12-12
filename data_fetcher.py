@@ -1,6 +1,6 @@
 """
-Live orbital data fetcher for satellite TLE information.
-Fetches current TLE data from orbit.ing-now.com and other sources.
+Retrieves live orbital data for given satellite
+Fetches TLE data from orbit.ing-now.com
 """
 
 import requests
@@ -12,14 +12,12 @@ from input_parser import InputParser
 
 
 class LiveDataFetcher:
-    """Fetch live satellite orbital data from various sources."""
-
     def __init__(self):
-        """Initialize the data fetcher with common satellites."""
+        """Initialize using common satellites."""
         self.base_url = "https://orbit.ing-now.com"
         self.parser = InputParser()
 
-        # Expanded satellite catalog with popular satellites
+        # Catalog with popular satellites
         self.satellite_catalog = {
             'iss': {'id': '25544', 'designator': '1998-067a', 'name': 'iss', 'full_name': 'International Space Station'},
             'hubble': {'id': '20580', 'designator': '1990-037b', 'name': 'hst', 'full_name': 'Hubble Space Telescope'},
@@ -35,23 +33,23 @@ class LiveDataFetcher:
 
     def list_available_satellites(self) -> Dict[str, str]:
         """
-        Get a list of all available satellites in the catalog.
+        List all available satellites in catalog.
 
         Returns
         -------
         Dict[str, str]
-            Dictionary mapping satellite keys to full names
+            Maps satellite keys to full names
         """
         return {key: info['full_name'] for key, info in self.satellite_catalog.items()}
     
     def fetch_tle_from_orbiting_now(self, satellite_name: str = 'iss') -> Optional[str]:
         """
-        Fetch TLE data from orbit.ing-now.com for a specific satellite.
+        Fetch TLE data from orbit.ing-now.com for specific satellite.
         
         Parameters
         ----------
         satellite_name : str
-            Name of the satellite ('iss', 'hubble', 'tiangong') or NORAD ID
+            Satellite name ('iss', 'hubble', 'tiangong') or NORAD ID
             
         Returns
         -------
@@ -68,20 +66,19 @@ class LiveDataFetcher:
         2 25544  51.6439  ...
         """
         try:
-            # Check if it's a known satellite name
+            # Check if satellite name is known
             if satellite_name.lower() in self.satellite_catalog:
                 sat_info = self.satellite_catalog[satellite_name.lower()]
                 url = f"{self.base_url}/satellite/{sat_info['id']}/{sat_info['designator']}/{sat_info['name']}/"
             else:
-                # Assume it's a NORAD ID
+                # Assume NORAD ID
                 url = f"{self.base_url}/satellite/{satellite_name}/"
             
-            # Fetch the webpage
+            # Fetch webpage
             response = requests.get(url, timeout=10)
             response.raise_for_status()
             
-            # Extract TLE from the page
-            # The website typically has TLE data in a specific format
+            # Extract TLE from page
             tle_data = self._extract_tle_from_html(response.text)
             
             return tle_data
@@ -92,7 +89,7 @@ class LiveDataFetcher:
     
     def _extract_tle_from_html(self, html_content: str) -> Optional[str]:
         """
-        Extract TLE data from the HTML content of orbit.ing-now.com.
+        Extract TLE data from HTML content of orbit.ing-now.com.
         
         Parameters
         ----------
@@ -104,11 +101,10 @@ class LiveDataFetcher:
         str or None
             Extracted TLE data
         """
-        # Look for TLE pattern in the HTML
-        # TLE lines have a very specific format
+        # Look for TLE pattern (unique format) in HTML
         tle_pattern = r'([A-Z0-9\s\(\)]+)\n(1 \d{5}[A-Z\s]+.{62})\n(2 \d{5}.{63})'
         
-        # Search for pre-formatted text blocks that might contain TLE
+        # Search for text blocks that might contain TLE
         pre_pattern = r'<pre[^>]*>(.*?)</pre>'
         pre_matches = re.findall(pre_pattern, html_content, re.DOTALL)
         
@@ -117,12 +113,12 @@ class LiveDataFetcher:
             pre_content = pre_content.replace('&nbsp;', ' ')
             pre_content = re.sub(r'<[^>]+>', '', pre_content)  # Remove any nested tags
             
-            # Look for TLE pattern
+            # Search for TLE pattern
             tle_match = re.search(tle_pattern, pre_content)
             if tle_match:
                 return '\n'.join(tle_match.groups())
         
-        # Alternative: Look for TLE lines directly in the page
+        # Alternative: Look for TLE lines directly in page
         line1_pattern = r'1 \d{5}[A-Z\s]+[\d\s\.\-\+]+\s+\d+'
         line2_pattern = r'2 \d{5}[\d\s\.]+\s+\d+'
         
@@ -130,7 +126,7 @@ class LiveDataFetcher:
         line2_matches = re.findall(line2_pattern, html_content)
         
         if line1_matches and line2_matches:
-            # Try to find satellite name
+            # Find satellite name
             name_pattern = r'([A-Z][A-Z0-9\s\(\)]+)(?=\s*1 \d{5})'
             name_match = re.search(name_pattern, html_content)
             
@@ -146,12 +142,12 @@ class LiveDataFetcher:
     
     def fetch_tle_from_celestrak(self, satellite_name: str) -> Optional[str]:
         """
-        Fetch TLE data from Celestrak.
+        Fetch TLE data from Celestrak (backup).
         
         Parameters
         ----------
         satellite_name : str
-            Name or NORAD ID of the satellite
+            Satellite Name/NORAD ID
             
         Returns
         -------
@@ -167,16 +163,15 @@ class LiveDataFetcher:
             if satellite_name.lower() in celestrak_urls:
                 url = celestrak_urls[satellite_name.lower()]
             elif satellite_name.isdigit():
-                # It's a NORAD ID
+                # NORAD ID
                 url = f'https://celestrak.org/NORAD/elements/gp.php?CATNR={satellite_name}&FORMAT=TLE'
             else:
-                # Try as part of active satellites
                 url = 'https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=TLE'
             
             response = requests.get(url, timeout=10)
             response.raise_for_status()
             
-            # For group queries, find the specific satellite
+            # Group queries: find specific satellite
             if 'GROUP=' in url:
                 lines = response.text.strip().split('\n')
                 for i in range(0, len(lines), 3):
@@ -192,12 +187,12 @@ class LiveDataFetcher:
     def get_orbital_elements(self, satellite_name: str = 'iss', 
                             source: str = 'auto') -> Optional[OrbitalElements]:
         """
-        Get orbital elements for a satellite from live sources.
+        Get orbital elements for satellite from live sources.
         
         Parameters
         ----------
         satellite_name : str
-            Name or NORAD ID of the satellite
+            Satellite Name/NORAD ID
         source : str
             Data source ('orbiting-now', 'celestrak', or 'auto')
             
@@ -230,7 +225,7 @@ class LiveDataFetcher:
                 with open(temp_file, 'w') as f:
                     f.write(tle_data)
 
-                # Parse using existing InputParser
+                # Parse via InputParser
                 elements = self.parser.parse_file(temp_file)
                 print(f"Successfully fetched live data for {satellite_name}")
                 return elements
@@ -251,14 +246,14 @@ class LiveDataFetcher:
     def track_satellite_realtime(self, satellite_name: str = 'iss', 
                                 update_interval: int = 60):
         """
-        Track a satellite with periodic updates.
+        Track satellite with periodic updates.
         
         Parameters
         ----------
         satellite_name : str
-            Name of satellite to track
+            Satellite Name
         update_interval : int
-            How often to fetch new data (seconds)
+            Data fetching frequency (seconds)
         """
         import time
         from propagator import TwoBodyPropagator
@@ -297,7 +292,7 @@ class LiveDataFetcher:
 
 
 def test_live_fetcher():
-    """Test the live data fetcher."""
+    """Test live data fetcher."""
     import numpy as np
     
     print("Testing Live Data Fetcher...")
