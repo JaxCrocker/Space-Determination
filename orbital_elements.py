@@ -1,6 +1,6 @@
 """
 Orbital elements data structures and conversions.
-Represents the six classical orbital elements that uniquely define an orbit.
+Represents 6 classical orbital elements that uniquely define an orbit.
 """
 
 import math
@@ -9,21 +9,18 @@ from datetime import datetime
 from typing import Optional, Tuple
 import constants
 
-
 @dataclass
 class OrbitalElements:
     """
-    Classical orbital elements representation.
-    
     Attributes:
         a: Semi-major axis (km)
-        e: Eccentricity (dimensionless)
+        e: Eccentricity
         i: Inclination (radians)
         raan: Right Ascension of Ascending Node (radians)
         arg_perigee: Argument of perigee (radians)
         mean_anomaly: Mean anomaly at epoch (radians)
         epoch: Reference epoch for the elements (datetime)
-        mu: Gravitational parameter (km³/s²)
+        mu: Gravitational parameter (sq. km/sq. s)
     """
     
     a: float  # Semi-major axis (km)
@@ -42,7 +39,7 @@ class OrbitalElements:
         Raises
         ------
         ValueError
-            If orbital elements are invalid 
+            Invalid orbital elements 
         """
         self.validate()
     
@@ -51,7 +48,7 @@ class OrbitalElements:
         Validate that orbital elements are physically meaningful.
         
         Raises:
-            ValueError: If any orbital element is invalid
+            ValueError: Invalid orbital elements
         """
         if self.a <= 0:
             raise ValueError(f"Semi-major axis must be positive, got {self.a}")
@@ -129,56 +126,7 @@ class OrbitalElements:
             return "parabolic"
         else:
             return "hyperbolic"
-    
-    @classmethod
-    def from_state_vector(cls, r: Tuple[float, float, float], 
-                         v: Tuple[float, float, float],
-                         epoch: datetime,
-                         mu: float = constants.EARTH_MU):
-        """
-        Create orbital elements from position and velocity vectors.
         
-        Args:
-            r: Position vector (x, y, z) in km
-            v: Velocity vector (vx, vy, vz) in km/s
-            epoch: Epoch for the state vector
-            mu: Gravitational parameter (km³/s²)
-            
-        Returns:
-            OrbitalElements: Computed orbital elements
-
-        Raises
-        ------
-        ValueError
-            If position or velocity vector is not of length 3
-
-        Example
-        --------
-        >>> from datetime import datetime
-        >>> r = (7000, 0, 0)
-        >>> v = (0, 7.5, 0)
-        >>> epoch = datetime.utcnow()
-        >>> oe = OrbitalElements.from_state_vector(r, v, epoch)
-        >>> print(oe.a)
-        7000.0
-        """
-        # This is a placeholder - implement the full conversion
-        # This involves computing h (angular momentum), n (node vector),
-        # and using various vector operations
-        
-        # For now, return dummy values
-        print("Warning: from_state_vector not fully implemented yet")
-        return cls(
-            a=7000.0,  # dummy value
-            e=0.001,   # dummy value
-            i=0.0,     # dummy value
-            raan=0.0,  # dummy value
-            arg_perigee=0.0,  # dummy value
-            mean_anomaly=0.0,  # dummy value
-            epoch=epoch,
-            mu=mu
-        )
-    
     def to_dict(self) -> dict:
         """
         Convert orbital elements to dictionary.
